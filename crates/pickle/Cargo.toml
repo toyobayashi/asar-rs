@@ -1,0 +1,19 @@
+[package]
+name = "chromium_pickle"
+version = "0.1.0"
+authors = ["Toyo Li"]
+edition = "2021"
+description = "Binary value packing and unpacking"
+repository = "https://github.com/toyobayashi/asar-rs"
+license = "MIT"
+
+# [lib]
+# crate-type = [
+#   "rlib",
+#   # "staticlib",
+#   # "cdylib",
+# ]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
