@@ -1,6 +1,6 @@
 [package]
 name = "asar_rs"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Toyo Li"]
 edition = "2021"
 description = "Creating Electron app packages"
