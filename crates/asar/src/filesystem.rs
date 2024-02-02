@@ -146,8 +146,11 @@ impl Filesystem {
     let node = self.search_node_from_directory_mut(dir)?;
     match node {
       Node::Directory(n) => {
-        n.files
-          .insert(name.to_string_lossy().to_string(), insert_node);
+        let name_string = name.to_string_lossy().to_string();
+        if !insert_node.is_dir() || n.files.get(&name_string).is_none() {
+          n.files
+            .insert(name_string, insert_node);
+        }
         Ok(())
       }
       _ => Err(Error::new(ErrorKind::ExpectDirNode(dir.clone()))),
