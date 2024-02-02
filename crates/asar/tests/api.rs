@@ -239,3 +239,17 @@ pub fn should_extract_a_text_file_from_archive_with_multibyte_characters_in_path
   assert_eq!(actual, expected);
   Ok(())
 }
+
+#[test]
+pub fn should_create_files_or_directories_whose_names_are_properties_of_object_prototype() -> Result<()> {
+  create_package("tests/input/packthis-object-prototype/", "tmp/packthis-object-prototype.asar")?;
+  comp_file("tmp/packthis-object-prototype.asar", "tests/expected/packthis-object-prototype.asar")?;
+  Ok(())
+}
+
+#[test]
+pub fn should_extract_files_or_directories_whose_names_are_properties_of_object_prototype() -> Result<()> {
+  extract_all("tests/expected/packthis-object-prototype.asar", "tmp/packthis-object-prototype/")?;
+  comp_dir("tests/input/packthis-object-prototype/", "tmp/packthis-object-prototype")?;
+  Ok(())
+}
