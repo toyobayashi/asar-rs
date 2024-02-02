@@ -22,6 +22,7 @@ pub enum ErrorStatus {
   ParseInt,
   Io,
   Json,
+  Extraction,
 }
 
 #[derive(Debug)]
@@ -40,6 +41,7 @@ pub(crate) enum ErrorKind {
   ParseInt(num::ParseIntError),
   Io(io::Error),
   Json(serde_json::Error),
+  Extraction(Vec<Error>),
 }
 
 impl Display for ErrorKind {
@@ -122,6 +124,21 @@ impl Display for ErrorKind {
       Self::ParseInt(err) => Display::fmt(err, f),
       Self::Io(err) => Display::fmt(err, f),
       Self::Json(err) => Display::fmt(err, f),
+      Self::Extraction(errors) => {
+        write!(
+          f,
+          "{}::ErrorKind::Extraction: Unable to extract some files:\n\n",
+          env!("CARGO_PKG_NAME")
+        )?;
+        for e in errors.iter() {
+          write!(
+            f,
+            "{}",
+            e
+          )?;
+        }
+        Ok(())
+      },
     }
   }
 }
@@ -140,6 +157,7 @@ impl ErrorImpl {
     match &self.kind {
       ErrorKind::InvalidHeaderSize => ErrorStatus::InvalidHeaderSize,
       ErrorKind::InvalidHeader => ErrorStatus::InvalidHeader,
+      ErrorKind::Extraction(_) => ErrorStatus::Extraction,
       ErrorKind::ExpectFileNode(_) => ErrorStatus::ExpectFileNode,
       ErrorKind::ExpectDirNode(_) => ErrorStatus::ExpectDirNode,
       ErrorKind::FileTooLarge(_) => ErrorStatus::FileTooLarge,

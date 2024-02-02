@@ -209,6 +209,7 @@ impl AsarFile {
     let filenames = self.list(&ListOptions::new())?;
     std::fs::create_dir_all(&dest)?;
 
+    let mut extraction_erros: Vec<Error> = Vec::new();
     for full_path in filenames.iter() {
       // Remove leading slash
       let filename = &full_path[1..];
@@ -233,9 +234,15 @@ impl AsarFile {
           symlink(link_to, &dest_filename)?;
         }
         Node::File(node) => {
-          self.extract_file_node(filename, node.clone(), dest_filename.as_path())?;
+          if let Err(e) = self.extract_file_node(filename, node.clone(), dest_filename.as_path()) {
+            extraction_erros.push(e);
+          }
         }
       };
+    }
+
+    if extraction_erros.len() > 0 {
+      return Err(Error::new(ErrorKind::Extraction(extraction_erros)));
     }
 
     Ok(())
