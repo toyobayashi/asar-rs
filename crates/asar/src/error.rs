@@ -96,7 +96,7 @@ impl Display for ErrorKind {
       Self::NoSuchEntry(asar_file_path) => {
         write!(
           f,
-          "{}::ErrorKind::NoSuchEntry: {}",
+          "{}::ErrorKind::NoSuchEntry: \"{}\" was not found in this archive",
           env!("CARGO_PKG_NAME"),
           asar_file_path
         )
